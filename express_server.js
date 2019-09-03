@@ -62,6 +62,12 @@ app.post('/urls/:id', (req, res) => {
   res.redirect('/urls')
 })
 
+app.post('/login', (req, res) => {
+  const username = req.body.username
+  res.cookie('username', username)
+  res.redirect('/urls')
+})
+
 app.get('/hello', (req, res) => {
   res.send('<html><body>Hello <b>World</b></body></html>\n')
 })
