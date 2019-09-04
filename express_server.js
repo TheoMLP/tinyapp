@@ -118,7 +118,7 @@ app.post('/urls', (req, res) => {
 })
 
 app.get('/urls/:shortURL', (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL }
+  let templateVars = { user: users[req.cookies["user_id"]], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, userID: urlDatabase[req.params.shortURL].userID}
   res.render('urls_show', templateVars)
 })
 
@@ -128,15 +128,23 @@ app.get('/u/:shortURL', (req, res) => {
 });
 
 app.post('/urls/:shortURL/delete', (req, res)  => {
-  const shortURL = req.params.shortURL
-  delete urlDatabase[shortURL]
-  res.redirect('/urls')
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL].userID) {
+    const shortURL = req.params.shortURL
+    delete urlDatabase[shortURL]
+    res.redirect('/urls')
+  } else {
+    res.status(400).send("Unable to delete URL as this account is not the creator")
+  }
 })
 
 app.post('/urls/:id', (req, res) => {
-  const shortURL = req.params.id
-  urlDatabase[shortURL] = req.body.longURL
-  res.redirect('/urls')
+  if (req.cookies["user_id"] === urlDatabase[req.params.shortURL].userID) {
+    const shortURL = req.params.id
+    urlDatabase[shortURL] = req.body.longURL
+    res.redirect('/urls')
+  } else {
+    res.status(400).send("Unable to delete URL as this account is not the creator")
+  }
 })
 
 app.get('/login', (req, res) => {
