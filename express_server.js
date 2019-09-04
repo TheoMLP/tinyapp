@@ -60,12 +60,12 @@ app.get('/urls.json', (req, res) => {
 })
 
 app.get('/urls', (req, res) => {
-  let templateVars = { username: req.cookies["username"], urls: urlDatabase,}
+  let templateVars = { user: users[req.cookies["user_id"]], urls: urlDatabase,}
   res.render('urls_index', templateVars)
 })
 
 app.get('/urls/new', (req, res) => {
-  let templateVars = { username: req.cookies["username"]}
+  let templateVars = { user: users[req.cookies["user_id"]]}
   res.render('urls_new', templateVars)
 })
 
@@ -76,7 +76,7 @@ app.post('/urls', (req, res) => {
 })
 
 app.get('/urls/:shortURL', (req, res) => {
-  let templateVars = { username: req.cookies["username"], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]}
+  let templateVars = { user: users[req.cookies["user_id"]], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]}
   res.render('urls_show', templateVars)
 })
 
@@ -109,7 +109,7 @@ app.post('/logout', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-  let templateVars = { username: req.cookies["username"] }
+  let templateVars = { user: users[req.cookies["user_id"]] }
   res.render('urls_registration', templateVars)
 })
 
