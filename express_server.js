@@ -10,8 +10,8 @@ app.use(cookieParser())
 app.set('view engine', 'ejs');
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": { longURL:"http://www.lighthouselabs.ca", userID: "aJ48lW"},
+  "9sm5xK": { longURL:"http://www.google.com", userID: "aJ48lW" }
 };
 
 const users = {
@@ -97,7 +97,7 @@ app.get('/urls/new', (req, res) => {
 
 app.post('/urls', (req, res) => {
   let shortURL = generateRandomString()
-  urlDatabase[shortURL] = req.body.longURL
+  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: users[req.cookies["user_id"]].id }
   res.redirect(`/urls/${shortURL}`)
 })
 
