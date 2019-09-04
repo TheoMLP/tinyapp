@@ -41,11 +41,33 @@ const addUserInfo = (email, password) => {
   return userId 
 }
 
-const authenticator = (email) => {
+const findUser = (email) => {
   for (let user of Object.values(users)) {
     if (user.email === email) {
-      return true
+      return user
     }
+  }
+  return false
+}
+
+const validate = (email, password, action) => {
+  const user = findUser(email);
+  if (!email || !password) {
+    return "Error, please fill in the remaining forms";
+  }
+  if (user && action === "register") {
+    return "Error, this email has already been registered";
+  }
+  if (!user && action === "login") {
+    return "User not found";
+  } 
+  return false
+}
+
+const authenticator = (email, password) => {
+  const user = findUser(email)
+  if (user && user.password === password) {
+    return user
   }
   return false
 }
@@ -97,9 +119,24 @@ app.post('/urls/:id', (req, res) => {
   res.redirect('/urls')
 })
 
+app.get('/login', (req, res) => {
+  let templateVars = { user: users[req.cookies["user_id"]] }
+  res.render('urls_login', templateVars)
+})
+
 app.post('/login', (req, res) => {
-  const username = req.body.username
-  res.cookie('username', username)
+  const { email, password } = req.body
+  const errorMsg = validate(email, password, "login")
+  if (errorMsg) {
+    res.status(403).send(errorMsg)
+    return;
+  } 
+  let authenticatedUser = authenticator(email, password)
+  if (!authenticatedUser) {
+    res.status(403).send("Incorrect Password")
+    return;
+  }
+  res.cookie("user_id", authenticatedUser.id)
   res.redirect('/urls')
 })
 
@@ -115,21 +152,14 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password } = req.body
-  if (!email || !password) {
-    res.status(400).send("Error, please fill in the remaining forms")
-  }
-  if (authenticator(email)) {
-    res.status(400).send("Error, this email has already been registered")
+  const errorMsg = validate(email, password, "register")
+  if (errorMsg) {
+    res.status(400).send(errorMsg)
   } else {
     const userId = addUserInfo(email, password)
     res.cookie('user_id', userId)
     res.redirect('/urls')
   }
-})
-
-app.get('/login', (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]] }
-  res.render('urls_login', templateVars)
 })
 
 app.get('/users', (req, res) => {
