@@ -41,6 +41,15 @@ const addUserInfo = (email, password) => {
   return userId 
 }
 
+const authenticator = (email) => {
+  for (let user of Object.values(users)) {
+    if (user.email === email) {
+      return true
+    }
+  }
+  return false
+}
+
 app.get('/', (req, res) => {
   res.statusCode = 200 
   res.send('Hello!')
@@ -106,9 +115,16 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password } = req.body
-  const userId = addUserInfo(email, password)
-  res.cookie('user_id', userId)
-  res.redirect('/urls')
+  if (!email || !password) {
+    res.status(400).send("Error, please fill in the remaining forms")
+  }
+  if (authenticator(email)) {
+    res.status(400).send("Error, this email has already been registered")
+  } else {
+    const userId = addUserInfo(email, password)
+    res.cookie('user_id', userId)
+    res.redirect('/urls')
+  }
 })
 
 app.get('/users', (req, res) => {
