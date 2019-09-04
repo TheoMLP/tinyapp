@@ -1,17 +1,17 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const app = express()
-const port = 8080 
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const app = express();
+const port = 8080;
 
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.set('view engine', 'ejs');
 
 const urlDatabase = {
   "b2xVn2": { longURL:"http://www.lighthouselabs.ca", userID: "aJ48lW"},
-  "9sm5xK": { longURL:"http://www.google.com", userID: "aJ48lW" }
+  "9sm5xK": { longURL:"http://www.google.com", userID: "aJ48lW"}
 };
 
 const users = {
@@ -25,30 +25,30 @@ const users = {
     email: "user2@example.com",
     password: "dishwasher-funk"
   }
-}
+};
 
 const generateRandomString = () => {
- return Math.random().toString(36).substring(7)
-}
+  return Math.random().toString(36).substring(7);
+};
 
 const addUserInfo = (email, password) => {
-  const userId = generateRandomString()
+  const userId = generateRandomString();
   users[userId] = {
     id: userId,
     email,
     password,
-  }
-  return userId 
-}
+  };
+  return userId;
+};
 
 const findUser = (email) => {
   for (let user of Object.values(users)) {
     if (user.email === email) {
-      return user
+      return user;
     }
   }
-  return false
-}
+  return false;
+};
 
 const validate = (email, password, action) => {
   const user = findUser(email);
@@ -60,30 +60,46 @@ const validate = (email, password, action) => {
   }
   if (!user && action === "login") {
     return "User not found";
-  } 
-  return false
-}
+  }
+  return false;
+};
 
 const authenticator = (email, password) => {
-  const user = findUser(email)
+  const user = findUser(email);
   if (user && user.password === password) {
-    return user
+    return user;
   }
-  return false
-}
+  return false;
+};
+
+const urlsForUser = (id) => {
+  let matchingURLS = [];
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userID === id) {
+      matchingURLS.push({shortURL: url, ...urlDatabase[url]});
+    }
+  }
+  return matchingURLS;
+};
 
 app.get('/', (req, res) => {
-  res.statusCode = 200 
-  res.send('Hello!')
+  res.statusCode = 200;
+  res.send('Hello!');
 });
 
 app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase)
+  res.json(urlDatabase);
 })
 
 app.get('/urls', (req, res) => {
   let templateVars = { user: users[req.cookies["user_id"]], urls: urlDatabase,}
-  res.render('urls_index', templateVars)
+  if (templateVars.user) {
+    const matchingURLS = urlsForUser(templateVars.user.id)
+    templateVars.urls = matchingURLS
+    res.render('urls_index', templateVars)
+  } else {
+    res.render('urls_index', templateVars)
+  }
 })
 
 app.get('/urls/new', (req, res) => {
@@ -102,12 +118,12 @@ app.post('/urls', (req, res) => {
 })
 
 app.get('/urls/:shortURL', (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]}
+  let templateVars = { user: users[req.cookies["user_id"]], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL }
   res.render('urls_show', templateVars)
 })
 
 app.get('/u/:shortURL', (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
