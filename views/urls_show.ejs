@@ -9,7 +9,28 @@
 
 <body>
 <% include partial/_header.ejs %>
-<% if (user.id === userID) { %>
+<% if (!user) { %>
+  <main style="margin: 1em;">
+    <h3>This URL belongs to an account</h3>
+    <h4<>Please Login to access it</h4>
+    <table class='table'> 
+    <thead>
+       <tr>
+        <th scope="col">Login</th>
+      </tr>
+     </thead>
+      <tbody> 
+      <tr>
+        <td>
+          <form method="GET" action="/login">
+            <button type="submit" class="btn btn-outline-primary">Login</button>
+          </form> 
+        </td>
+      </tr>
+     </tbody>
+    </table>
+  </main>
+<% } else if (user.id === userID) { %>
     <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
