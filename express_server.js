@@ -7,7 +7,7 @@ const port = 8080;
 //helper functions
 const { generateRandomString, addUserInfo, validate, authenticator, urlsForUser } = require('./lib/helper')
 
-//dabases
+//dabases (url, users)
 const { urlDatabase, users } = require('./dB/url&user')
 
 //setup
@@ -18,12 +18,13 @@ app.use(cookieSession({
   keys: ['e1d50c4f-538a-4682-89f4-c002f10a59c8', '2d310699-67d3-4b26-a3a4-1dbf2b67be5c']
 }));
 
-//routings
+//All Routings
 app.get('/', (req, res) => {
   res.statusCode = 200;
   res.send('Hello!');
 });
 
+//access main page containing users-specific URL
 app.get('/urls', (req, res) => {
   let templateVars = { user: users[req.session.user_id], urls: urlDatabase, }
   if (templateVars.user) {
@@ -35,6 +36,7 @@ app.get('/urls', (req, res) => {
   }
 })
 
+//access 'Create URL' page
 app.get('/urls/new', (req, res) => {
   let templateVars = { user: users[req.session.user_id] }
   if (templateVars.user) {
@@ -44,22 +46,26 @@ app.get('/urls/new', (req, res) => {
   }
 })
 
+//create new URL
 app.post('/urls', (req, res) => {
   let shortURL = generateRandomString()
   urlDatabase[shortURL] = { longURL: req.body.longURL, userID: users[req.session.user_id].id }
   res.redirect(`/urls/${shortURL}`)
 })
 
+//to access shortURL display page
 app.get('/urls/:shortURL', (req, res) => {
   let templateVars = { user: users[req.session.user_id], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, userID: urlDatabase[req.params.shortURL].userID }
   res.render('urls_show', templateVars)
 })
 
+//to access original site
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 
+//URL delete routing
 app.post('/urls/:shortURL/delete', (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
     const shortURL = req.params.shortURL
@@ -71,6 +77,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   }
 })
 
+//URL edit routing
 app.post('/urls/:id', (req, res) => {
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
     const shortURL = req.params.id
@@ -82,6 +89,7 @@ app.post('/urls/:id', (req, res) => {
   }
 })
 
+//get and validate login
 app.get('/login', (req, res) => {
   let templateVars = { user: users[req.session.user_id] }
   res.render('urls_login', templateVars)
@@ -105,11 +113,13 @@ app.post('/login', (req, res) => {
   res.redirect('/urls')
 })
 
+//get logged out
 app.post('/logout', (req, res) => {
   req.session = null
   res.redirect('/urls')
 })
 
+//get and create new profile
 app.get('/register', (req, res) => {
   let templateVars = { user: users[req.session.user_id] }
   res.render('urls_registration', templateVars)
@@ -129,6 +139,7 @@ app.post('/register', (req, res) => {
   }
 })
 
+//listening port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
