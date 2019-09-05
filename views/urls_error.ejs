@@ -10,7 +10,13 @@
 <body>
 <% include partial/_header.ejs %>
 
-<% if (errorMsg) { %> 
+<% if (errorMsg && statusCode === 404) { %> 
+  <main style="margin: 1em; text-align: center; margin-top: 10px;">
+    <h1><%= statusCode %></h1>
+    <h3><%= errorMsg %></h3>
+    <h4<>Please try again</h4>
+  </main>
+<% } else if (errorMsg) { %> 
   <main style="margin: 1em; text-align: center; margin-top: 10px;">
     <h1><%= statusCode %></h1>
     <h3><%= errorMsg %></h3>

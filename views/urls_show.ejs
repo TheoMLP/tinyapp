@@ -9,9 +9,31 @@
 
 <body>
 <% include partial/_header.ejs %>
-<% if (!user) { %>
+<% if (shortURL === "notFound") { %>
   <main style="margin: 1em;">
-    <h3>This URL belongs to another account</h3>
+    <h1>404</h1>
+    <h3>URL does not exist</h3>
+    <h4<>Please Login to create new ones</h4>
+    <table class='table'> 
+    <thead>
+       <tr>
+        <th scope="col">Login</th>
+      </tr>
+     </thead>
+      <tbody> 
+      <tr>
+        <td>
+          <form method="GET" action="/login">
+            <button type="submit" class="btn btn-outline-primary">Login</button>
+          </form> 
+        </td>
+      </tr>
+     </tbody>
+    </table>
+  </main>
+<% } else if (!user) { %>
+  <main style="margin: 1em;">
+    <h3>This URL belongs to an account</h3>
     <h4<>Please Login to access it</h4>
     <table class='table'> 
     <thead>
@@ -42,7 +64,7 @@
         <form class="form-inline justify-content-center" action="/urls/<%= shortURL %>" method="POST">
           <div class="form-group mb-2">
             <label for="longURL">Enter a new URL:</label>
-            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin-right: 10px; margin-left: 10px;">
+            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 350px; margin-right: 10px; margin-left: 10px;">
             <button type="submit" class="btn btn-outline-primary">Update</button>
           </div>
         </form>
@@ -50,8 +72,8 @@
   </div>
 <% } else { %> 
   <main style="margin: 1em;">
-    <h3>This URL doesn't belong to your account</h3>
-    <h4<>Please Login to access it</h4>
+    <h3>This URL belongs to another account</h3>
+    <h4<>Please Login/switch accounts to access it</h4>
     <table class='table'> 
     <thead>
        <tr>
