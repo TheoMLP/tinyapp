@@ -19,9 +19,14 @@ app.use(cookieSession({
 }));
 
 //All Routings
+
+//home page redirection
 app.get('/', (req, res) => {
-  res.statusCode = 200;
-  res.send('Hello!');
+  if (req.session.user_id) {
+    res.redirect('urls')
+  } else {
+    res.redirect('/login')
+  }
 });
 
 //access main page containing users-specific URL
