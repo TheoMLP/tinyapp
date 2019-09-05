@@ -4,8 +4,13 @@ const cookieSession = require('cookie-session');
 const app = express();
 const port = 8080;
 
-const { generateRandomString, addUserInfo, validate, authenticator, urlsForUser } = require('./helper')
+//helper functions
+const { generateRandomString, addUserInfo, validate, authenticator, urlsForUser } = require('./lib/helper')
 
+//dabases
+const { urlDatabase, users } = require('./dB/url&user')
+
+//setup
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
@@ -13,24 +18,7 @@ app.use(cookieSession({
   keys: ['e1d50c4f-538a-4682-89f4-c002f10a59c8', '2d310699-67d3-4b26-a3a4-1dbf2b67be5c']
 }));
 
-const urlDatabase = {
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW" },
-  "9sm5xK": { longURL: "http://www.google.com", userID: "aJ48lW" }
-};
-
-const users = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
-  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-};
-
+//routings
 app.get('/', (req, res) => {
   res.statusCode = 200;
   res.send('Hello!');
@@ -101,13 +89,13 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body
-  const errorMsg = validate(email, password, "login", users)
+  const errorMsg = validate(email, password, "login")
   if (errorMsg) {
     const error = { errorMsg, statusCode: 403, user: users[req.session.user_id] }
     res.render('urls_error', error)
     return;
   }
-  let authenticatedUser = authenticator(email, password, users)
+  let authenticatedUser = authenticator(email, password)
   if (!authenticatedUser) {
     const error = { errorMsg: "Incorrect password", statusCode: 403, user: users[req.session.user_id] }
     res.render('urls_error', error)
@@ -129,13 +117,13 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const { email, password } = req.body
-  const errorMsg = validate(email, password, "register", users)
+  const errorMsg = validate(email, password, "register")
   if (errorMsg) {
     const error = { errorMsg, statusCode: 403, user: users[req.session.user_id] }
     res.render('urls_error', error)
     return;
   } else {
-    const userId = addUserInfo(email, password, users)
+    const userId = addUserInfo(email, password)
     req.session.user_id = userId
     res.redirect('/urls')
   }
