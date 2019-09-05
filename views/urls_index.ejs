@@ -42,25 +42,32 @@
       </table>
      </main>
     <% } else { %> 
-      <main style="margin: 1em;">
-          <h3>Please Login or Register</h3>
+      <main style="margin: 1em; text-align: center; margin-top: 10px;">
+          <h3>Please Login / Register</h3>
           <table class='table'> 
           <thead>
              <tr>
-              <th scope="col">Login</th>
-              <th scope="col">Register</th>
+              <th style="text-align: center;" scope="col">Login</th>
             </tr>
            </thead>
             <tbody> 
             <tr>
               <td>
-                <form method="GET" action="/login">
-                  <button type="submit" class="btn btn-outline-primary">Login</button>
+                <form method="GET" action="/login" style="text-align: center;">
+                  <button type="submit" class="btn btn-outline-info">Login</button>
                 </form> 
               </td>
+            </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th style="text-align: center;" scope="col">Register</th>
+              </tr>
+            </thead>
+            <tr>
               <td>
-                <form method="GET" action="/register">
-                  <button type="submit" class="btn btn-outline-danger">Register</button>
+                <form method="GET" action="/register" style="text-align: center;">
+                  <button type="submit" class="btn btn-outline-info">Register</button>
                 </form>
              </td>
             </tr>

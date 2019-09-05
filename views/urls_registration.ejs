@@ -10,17 +10,15 @@
     <% include partial/_header.ejs %> 
 
     <main>
-      <h3 style="text-align: center">Create Account</h3>
-      <form class="form-inline justify-content-center" action="/register" method="POST">
-        <tr>
+      <h3 style="text-align: center; margin-top: 8px;">Create Account</h3>
+      <form class="w-50 m-auto" action="/register" method="POST">
           <div class="form-group mb-2">
             <label for="longURL">Email address:</label>
-            <input class="form-control" type="email" name="email" placeholder="http://" style="width: 300px; margin: 1em">
+            <input class="form-control" type="email" name="email" placeholder="http://" style="margin-bottom: 10px;">
 
             <label for="longURL">Password:</label>
-            <input class="form-control" type="password" name="password" placeholder="http://" style="width: 300px; margin: 1em">
+            <input class="form-control" type="password" name="password" placeholder="http://" style="margin-bottom: 10px;">
           </div>
-        </tr>
         <button type="submit" class="btn btn-outline-success">Submit</button>
       </form>
     </main> 

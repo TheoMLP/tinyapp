@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 const app = express();
 const port = 8080;
 
