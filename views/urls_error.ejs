@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Chilanka&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap" rel="stylesheet">
+  <title>URL - TinyApp Example</title>
+</head>
+
+<body>
+<% include partial/_header.ejs %>
+
+<% if (errorMsg) { %> 
+  <main style="margin: 1em; text-align: center; margin-top: 10px;">
+    <h1><%= statusCode %></h1>
+    <h3><%= errorMsg %></h3>
+    <h4<>Please try again</h4>
+    <table class='table'> 
+    <thead>
+       <tr>
+        <th style="text-align: center;" scope="col">Login</th>
+      </tr>
+     </thead>
+      <tbody> 
+      <tr>
+        <td>
+          <form method="GET" action="/login" style="text-align: center;">
+            <button type="submit" class="btn btn-outline-info">Login</button>
+          </form> 
+        </td>
+      </tr>
+     </tbody>
+     <thead>
+        <tr>
+         <th style="text-align: center;" scope="col">Register</th>
+       </tr>
+      </thead>
+       <tbody> 
+       <tr>
+         <td>
+           <form method="GET" action="/register" style="text-align: center;">
+             <button type="submit" class="btn btn-outline-info">Register</button>
+           </form> 
+         </td>
+       </tr>
+      </tbody>
+    </table>
+  </main>
+  <% } %>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
