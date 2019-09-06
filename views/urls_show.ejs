@@ -2,15 +2,15 @@
 <head>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Chilanka&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap" rel="stylesheet">
   <title>URL - TinyApp Example</title>
 </head>
 
 <body>
 <% include partial/_header.ejs %>
 <% if (shortURL === "notFound") { %>
-  <main style="margin: 1em;">
+  <main style="margin: 1em; font-family: 'Didact Gothic', sans-serif;">
     <h1>404</h1>
     <h3>URL does not exist</h3>
     <h4<>Please Login to create new ones</h4>
@@ -32,7 +32,7 @@
     </table>
   </main>
 <% } else if (!user) { %>
-  <main style="margin: 1em;">
+  <main style="margin: 1em; font-family: 'Didact Gothic', sans-serif;"">
     <h3>This URL belongs to an account</h3>
     <h4<>Please Login to access it</h4>
     <table class='table'> 
@@ -53,6 +53,7 @@
     </table>
   </main>
 <% } else if (user.id === userID) { %>
+  <main style="font-family: 'Didact Gothic', sans-serif;">
     <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
@@ -70,8 +71,9 @@
         </form>
     </div>
   </div>
+</main>
 <% } else { %> 
-  <main style="margin: 1em;">
+  <main style="margin: 1em; font-family: 'Didact Gothic', sans-serif;"">
     <h3>This URL belongs to another account</h3>
     <h4<>Please Login/switch accounts to access it</h4>
     <table class='table'> 

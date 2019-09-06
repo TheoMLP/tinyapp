@@ -4,15 +4,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Chilanka&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap" rel="stylesheet">
     <title>TinyApp</title>
   </head>
   <body>
     <% include partial/_header.ejs %>
 
     <% if (user) { %>
-     <main style="margin: 1em;">
+     <main style="margin: 1em; font-family: 'Didact Gothic', sans-serif;">
       <h3>My URLs</h3>
       <table class='table'> 
       <thead>
@@ -42,8 +42,8 @@
       </table>
      </main>
     <% } else { %> 
-      <main style="margin: 1em; text-align: center; margin-top: 10px;">
-          <h2>Welcome to TinyApp!</h2>
+      <main style="margin: 1em; text-align: center; margin-top: 10px; font-family: 'Didact Gothic', sans-serif;">
+          <h1>Welcome to TinyApp!</h1>
           <h5>To access the URLs and features of the app please Login / Register </h5>
           <table class='table'> 
           <thead>
