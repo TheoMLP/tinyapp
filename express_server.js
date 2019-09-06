@@ -125,7 +125,7 @@ app.post('/urls/:id', (req, res) => {
 
 //get and validate login
 app.get('/login', (req, res) => {
-  if (req.session.user_id) {
+  if (users[req.session.user_id]) {
     res.redirect('/urls');
   } else {
     let templateVars = { user: users[req.session.user_id] };
@@ -157,7 +157,7 @@ app.post('/logout', (req, res) => {
 
 //get and create new profile
 app.get('/register', (req, res) => {
-  if (req.session.user_id) {
+  if (users[req.session.user_id]) {
     res.redirect('/urls');
   } else {
     let templateVars = { user: users[req.session.user_id] };
