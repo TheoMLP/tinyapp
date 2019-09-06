@@ -5,7 +5,12 @@ const app = express();
 const port = 8080;
 
 //helper functions
-const { generateRandomString, addUserInfo, validate, authenticator, urlsForUser } = require('./lib/helper');
+const { 
+  generateRandomString,
+  addUserInfo, validate, 
+  authenticator, urlsForUser, 
+  displayError 
+} = require('./lib/helper');
 
 //dabases (url, users)
 const { urlDatabase, users } = require('./dB/url&user');
@@ -20,7 +25,7 @@ app.use(cookieSession({
 
 //All Routings
 
-//home page
+//home page routing
 app.get('/', (req, res) => {
   if (req.session.user_id) {
     res.redirect('/urls')
@@ -54,31 +59,36 @@ app.get('/urls/new', (req, res) => {
 //create new URL
 app.post('/urls', (req, res) => {
   if (!req.session.user_id) {
-    const error = { errorMsg: "Cannot create URL before signing in", user: users[req.session.user_id], statusCode: 404};
-    res.render('urls_error', error);
+    displayError("Cannot create URL before signing in", users[req.session.user_id], 403, res);
     return;
   }
   let shortURL = generateRandomString();
-  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: users[req.session.user_id].id };
+  urlDatabase[shortURL] = { 
+    longURL: req.body.longURL, 
+    userID: users[req.session.user_id].id 
+  };
   res.redirect(`/urls/${shortURL}`);
 });
 
 //to access shortURL display page
 app.get('/urls/:shortURL', (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
-    const error = { errorMsg: "ShortURL Not Found", user: users[req.session.user_id], statusCode: 404};
-    res.render('urls_error', error);
+    displayError("ShortURL Not Found", users[req.session.user_id], 404, res);
     return;
   }
-  let templateVars = { user: users[req.session.user_id], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, userID: urlDatabase[req.params.shortURL].userID };
+  let templateVars = { 
+    user: users[req.session.user_id], 
+    shortURL: req.params.shortURL, 
+    longURL: urlDatabase[req.params.shortURL].longURL, 
+    userID: urlDatabase[req.params.shortURL].userID 
+  };
   res.render('urls_show', templateVars);
 });
 
 //to access original site
 app.get('/u/:shortURL', (req, res) => {
   if (!urlDatabase[req.params.shortURL]) {
-    const error = { errorMsg: "ShortURL doesn't exist", user: users[req.session.user_id], statusCode: 404};
-    res.render('urls_error', error);
+    displayError("ShortURL doesn't exist", users[req.session.user_id], 404, res);
     return;
   }
   const longURL = urlDatabase[req.params.shortURL].longURL;
@@ -92,8 +102,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
     delete urlDatabase[shortURL];
     res.redirect('/urls');
   } else {
-    const error = { errorMsg: "Unable to delete URL as you do not have the URL ownership", user: users[req.session.user_id], statusCode: 403};
-    res.render('urls_error', error);
+    displayError("Unable to delete/no URL ownership", users[req.session.user_id], 403, res);
   }
 });
 
@@ -104,8 +113,7 @@ app.post('/urls/:id', (req, res) => {
     urlDatabase[shortURL].longURL = req.body.longURL;
     res.redirect('/urls');
   } else {
-    const error = { errorMsg: "Unable to edit URL as you do not have the URL ownership", user: users[req.session.user_id], statusCode: 403};
-    res.render('urls_error', error);
+    displayError("Unable to edit/no URL ownership", users[req.session.user_id], 403, res);
   }
 });
 
@@ -123,14 +131,12 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const errorMsg = validate(email, password, "login");
   if (errorMsg) {
-    const error = { errorMsg, statusCode: 403, user: users[req.session.user_id] };
-    res.render('urls_error', error);
+    displayError(errorMsg, users[req.session.user_id], 403, res);
     return;
   }
   let authenticatedUser = authenticator(email, password);
   if (!authenticatedUser) {
-    const error = { errorMsg: "Incorrect password", statusCode: 403, user: users[req.session.user_id] };
-    res.render('urls_error', error);
+    displayError("Incorrect Password", users[req.session.user_id], 403, res);
     return;
   }
   req.session.user_id = authenticatedUser.id;
@@ -157,19 +163,14 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   const errorMsg = validate(email, password, "register");
   if (errorMsg) {
-    const error = { errorMsg, statusCode: 403, user: users[req.session.user_id] };
-    res.render('urls_error', error);
+    displayError(errorMsg, users[req.session.user_id], 403, res)
     return;
-  } else {
-    const userId = addUserInfo(email, password);
-    req.session.user_id = userId;
-    res.redirect('/urls');
   }
+  const userId = addUserInfo(email, password);
+  req.session.user_id = userId;
+  res.redirect('/urls');
 });
 
-app.get('/urlDb', (req, res) => {
-  res.json(urlDatabase)
-})
 //listening port
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
