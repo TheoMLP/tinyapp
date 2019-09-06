@@ -4,8 +4,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Features 
 
-- Create and store your short versions of valid URL 
-- Share your short URL for any user to access on their website/app
+- Create and store your short versions of valid URLs
+- Share your short URLs for any user to access on their website/app
 - Made a typo? TinyApp allows you to update/delete any of your shortened URLs 
 
 ## Final Product
