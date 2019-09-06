@@ -27,7 +27,7 @@ app.use(cookieSession({
 
 //home page routing
 app.get('/', (req, res) => {
-  if (req.session.user_id) {
+  if (users [req.session.user_id]) {
     res.redirect('/urls');
   } else {
     res.redirect('/login');
@@ -91,7 +91,7 @@ app.get('/u/:shortURL', (req, res) => {
     displayError("ShortURL doesn't exist", users[req.session.user_id], 404, res);
     return;
   }
-  const substring = 'http://'
+  const substring = 'http://';
   if (urlDatabase[req.params.shortURL].longURL.includes(substring)) {
     const longURL = urlDatabase[req.params.shortURL].longURL;
     res.redirect(longURL);
