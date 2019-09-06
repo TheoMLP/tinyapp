@@ -131,12 +131,12 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const errorMsg = validate(email, password, "login");
   if (errorMsg) {
-    displayError(errorMsg, users[req.session.user_id], 403, res);
+    displayError(errorMsg, users[req.session.user_id], 400, res);
     return;
   }
   let authenticatedUser = authenticator(email, password);
   if (!authenticatedUser) {
-    displayError("Incorrect Password", users[req.session.user_id], 403, res);
+    displayError("Incorrect Password", users[req.session.user_id], 401, res);
     return;
   }
   req.session.user_id = authenticatedUser.id;
@@ -163,7 +163,7 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   const errorMsg = validate(email, password, "register");
   if (errorMsg) {
-    displayError(errorMsg, users[req.session.user_id], 403, res)
+    displayError(errorMsg, users[req.session.user_id], 400, res)
     return;
   }
   const userId = addUserInfo(email, password);
