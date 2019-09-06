@@ -4,9 +4,9 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["Welcome page display when accessing the app which prompts the user to login or register"](https://github.com/TheoMLP/tinyapp/blob/master/docs/welcome_page.png)
+["Welcome page display when accessing the app which prompts the user to login or register"](https://github.com/TheoMLP/tinyapp/blob/master/docs/welcome_page.png)
 
-!["Register page which allows users to create new TinyAPP accounts"](https://github.com/TheoMLP/tinyapp/blob/master/docs/register_page.png)
+["Register page which allows users to create new TinyAPP accounts"](https://github.com/TheoMLP/tinyapp/blob/master/docs/register_page.png)
 
 ## Dependencies
 
