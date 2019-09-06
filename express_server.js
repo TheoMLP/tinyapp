@@ -4,18 +4,18 @@ const cookieSession = require('cookie-session');
 const app = express();
 const port = 8080;
 
-//helper functions
-const { 
+//helper functions from lib
+const {
   generateRandomString,
-  addUserInfo, validate, 
-  authenticator, urlsForUser, 
-  displayError 
+  addUserInfo, validate,
+  authenticator, urlsForUser,
+  displayError
 } = require('./lib/helper');
 
-//dabases (url, users)
+//dabases (url, users) from dB
 const { urlDatabase, users } = require('./dB/url&user');
 
-//setup
+//express setup
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
@@ -28,9 +28,9 @@ app.use(cookieSession({
 //home page routing
 app.get('/', (req, res) => {
   if (req.session.user_id) {
-    res.redirect('/urls')
+    res.redirect('/urls');
   } else {
-    res.redirect('/login')
+    res.redirect('/login');
   }
 });
 
@@ -63,31 +63,31 @@ app.post('/urls', (req, res) => {
     return;
   }
   let shortURL = generateRandomString();
-  urlDatabase[shortURL] = { 
-    longURL: req.body.longURL, 
-    userID: users[req.session.user_id].id 
+  urlDatabase[shortURL] = {
+    longURL: req.body.longURL,
+    userID: users[req.session.user_id].id
   };
   res.redirect(`/urls/${shortURL}`);
 });
 
 //to access shortURL display page
 app.get('/urls/:shortURL', (req, res) => {
-  if (!urlDatabase[req.params.shortURL]) {
+  if (!urlDatabase[req.params.shortURL]) {
     displayError("ShortURL Not Found", users[req.session.user_id], 404, res);
     return;
   }
-  let templateVars = { 
-    user: users[req.session.user_id], 
-    shortURL: req.params.shortURL, 
-    longURL: urlDatabase[req.params.shortURL].longURL, 
-    userID: urlDatabase[req.params.shortURL].userID 
+  let templateVars = {
+    user: users[req.session.user_id],
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL].longURL,
+    userID: urlDatabase[req.params.shortURL].userID
   };
   res.render('urls_show', templateVars);
 });
 
 //to access original site
 app.get('/u/:shortURL', (req, res) => {
-  if (!urlDatabase[req.params.shortURL]) {
+  if (!urlDatabase[req.params.shortURL]) {
     displayError("ShortURL doesn't exist", users[req.session.user_id], 404, res);
     return;
   }
@@ -119,8 +119,8 @@ app.post('/urls/:id', (req, res) => {
 
 //get and validate login
 app.get('/login', (req, res) => {
-  if (req.session.user_id) {
-    res.redirect('/urls')
+  if (req.session.user_id) {
+    res.redirect('/urls');
   } else {
     let templateVars = { user: users[req.session.user_id] };
     res.render('urls_login', templateVars);
@@ -151,8 +151,8 @@ app.post('/logout', (req, res) => {
 
 //get and create new profile
 app.get('/register', (req, res) => {
-  if (req.session.user_id) {
-    res.redirect('/urls')
+  if (req.session.user_id) {
+    res.redirect('/urls');
   } else {
     let templateVars = { user: users[req.session.user_id] };
     res.render('urls_registration', templateVars);
@@ -163,7 +163,7 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body;
   const errorMsg = validate(email, password, "register");
   if (errorMsg) {
-    displayError(errorMsg, users[req.session.user_id], 400, res)
+    displayError(errorMsg, users[req.session.user_id], 400, res);
     return;
   }
   const userId = addUserInfo(email, password);
