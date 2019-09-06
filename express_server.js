@@ -91,8 +91,14 @@ app.get('/u/:shortURL', (req, res) => {
     displayError("ShortURL doesn't exist", users[req.session.user_id], 404, res);
     return;
   }
-  const longURL = urlDatabase[req.params.shortURL].longURL;
-  res.redirect(longURL);
+  const substring = 'http://'
+  if (urlDatabase[req.params.shortURL].longURL.includes(substring)) {
+    const longURL = urlDatabase[req.params.shortURL].longURL;
+    res.redirect(longURL);
+  } else {
+    const longURL = `http://${urlDatabase[req.params.shortURL].longURL}`;
+    res.redirect(longURL);
+  }
 });
 
 //URL delete routing
